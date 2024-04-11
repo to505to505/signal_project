@@ -1,6 +1,6 @@
 # Project Members 
-Vladimir Bortsov i6357808
-Dmitrii Sakharov i6358438
+- Vladimir Bortsov i6357808
+- Dmitrii Sakharov i6358438
 
 # Cardio Data Simulator
 
