@@ -13,6 +13,10 @@ public class AlertGenerator implements PatientDataGenerator {
         AlertStates = new boolean[patientCount + 1];
     }
 
+    //public boolean evaluateData(){
+//
+    //}
+
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {

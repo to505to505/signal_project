@@ -26,6 +26,11 @@
             <artifactId>Java-WebSocket</artifactId>
             <version>1.5.2</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.12.5</version>
+        </dependency>
 
     </dependencies>
     <build>
