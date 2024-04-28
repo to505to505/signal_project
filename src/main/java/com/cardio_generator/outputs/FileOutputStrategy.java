@@ -8,27 +8,40 @@ import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class FileOutputStrategy implements OutputStrategy {
+    // Used camel case due to the Java variable naming conventions
+    private String baseDirectory;
+    // Used upper snake case, because it is constant
+    public final ConcurrentHashMap<String, String> FILE_MAP = new ConcurrentHashMap<>();
 
-    private String BaseDirectory;
-
-    public final ConcurrentHashMap<String, String> file_map = new ConcurrentHashMap<>();
-
+    /**
+     * Constructor with baseDirectory parameter.
+     * @param baseDirectory corresponds to the chosen directory
+     */
     public FileOutputStrategy(String baseDirectory) {
-
-        this.BaseDirectory = baseDirectory;
+        //Adopted changed name
+        this.baseDirectory = baseDirectory;
     }
 
+    /**
+     * Function that outputs patient record
+     * @param patientId corresponds to the patient ID
+     * @param timestamp corresponds to the time stamp
+     * @param label corresponds to the data label
+     * @param data corresponds to the inputted data
+     */
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
         try {
             // Create the directory
-            Files.createDirectories(Paths.get(BaseDirectory));
+            //Adopted changed name
+            Files.createDirectories(Paths.get(baseDirectory));
         } catch (IOException e) {
             System.err.println("Error creating base directory: " + e.getMessage());
             return;
         }
         // Set the FilePath variable
-        String FilePath = file_map.computeIfAbsent(label, k -> Paths.get(BaseDirectory, label + ".txt").toString());
+        //Adopted changed name
+        String FilePath = FILE_MAP.computeIfAbsent(label, k -> Paths.get(baseDirectory, label + ".txt").toString());
 
         // Write the data to the file
         try (PrintWriter out = new PrintWriter(

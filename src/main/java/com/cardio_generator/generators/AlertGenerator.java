@@ -7,15 +7,21 @@ import java.util.Random;
 import com.cardio_generator.outputs.OutputStrategy;
 
 public class AlertGenerator implements PatientDataGenerator {
+    // Used upper snake case, because it is constant
+    public static final Random RANDOM_GENERATOR = new Random();
+    // Used camel case due to the Java variable naming conventions
+    private boolean[] alertStates; // false = resolved, true = pressed
 
-    public static final Random randomGenerator = new Random();
-    private boolean[] AlertStates; // false = resolved, true = pressed
-
+    /**
+     * Function initializes alert states array.
+     * @param patientCount corresponds number of observed patients
+     */
     public AlertGenerator(int patientCount) {
-        AlertStates = new boolean[patientCount + 1];
+        //Adopted changed name
+        alertStates = new boolean[patientCount + 1];
     }
-
-    public void evaluateData(PatientData patient, PatientDataCriteria criteria){
+    //please ignore the next commented lines
+    /*public void evaluateData(PatientData patient, PatientDataCriteria criteria){
         HashMap<String, Double> metrics = patient.getMetrics();
         for(Map.Entry<String, Double> metric: metrics.entrySet()){
             if(criteria.checkCriteria(metric.getKey(), metric.getValue()) == false) {
@@ -25,23 +31,35 @@ public class AlertGenerator implements PatientDataGenerator {
     }
     public void triggerAlert(Alert alert){
         System.out.println("Patient: " + alert.getPatientID() + " has " + alert.getCondition() + ", need immediate help");
-    }
+    }*/
+    /**
+     * Function outputs possible alerts due to its probability
+     * @param patientId corresponds to the patientID
+     * @param outputStrategy corresponds to used output strategy
+     */
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {
-            if (AlertStates[patientId]) {
-                if (randomGenerator.nextDouble() < 0.9) { // 90% chance to resolve
-                    AlertStates[patientId] = false;
+            //Adopted changed name
+            if (alertStates[patientId]) {
+                //Adopted changed name
+                if (RANDOM_GENERATOR.nextDouble() < 0.9) { // 90% chance to resolve
+                    //Adopted changed name
+                    alertStates[patientId] = false;
                     // Output the alert
                     outputStrategy.output(patientId, System.currentTimeMillis(), "Alert", "resolved");
                 }
             } else {
-                double Lambda = 0.1; // Average rate (alerts per period), adjust based on desired frequency
-                double p = -Math.expm1(-Lambda); // Probability of at least one alert in the period
-                boolean alertTriggered = randomGenerator.nextDouble() < p;
+                //Used camel case due to the Java variable naming conventions
+                double lamda = 0.1; // Average rate (alerts per period), adjust based on desired frequency
+                //Adopted changed name
+                double p = -Math.expm1(-lamda); // Probability of at least one alert in the period
+                //Adopted changed name
+                boolean alertTriggered = RANDOM_GENERATOR.nextDouble() < p;
 
                 if (alertTriggered) {
-                    AlertStates[patientId] = true;
+                    //Adopted changed name
+                    alertStates[patientId] = true;
                     // Output the alert
                     outputStrategy.output(patientId, System.currentTimeMillis(), "Alert", "triggered");
                 }
@@ -52,7 +70,8 @@ public class AlertGenerator implements PatientDataGenerator {
         }
     }
 }
-class PatientDataCriteria{
+//please ignore the next commented lines
+/*class PatientDataCriteria{
 
 
     private HashMap<String, CriteriaBounds> criterias;
@@ -87,4 +106,4 @@ class CriteriaBounds{
     Double leftBound;
     Double rightBound;
 
-}
+}*/
