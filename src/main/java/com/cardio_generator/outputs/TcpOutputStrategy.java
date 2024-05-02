@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 /**
  * The {@code TcpOutputStrategy} class is responsible for outputting patient record through TCP,
- * using {@code TcpOutputStrategy}
+ * using {@code output}
  */
 public class TcpOutputStrategy implements OutputStrategy {
 

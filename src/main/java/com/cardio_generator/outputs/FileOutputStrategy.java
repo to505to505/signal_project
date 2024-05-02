@@ -7,6 +7,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * The {@code FileOutputStrategy} class is responsible for outputting patient record through local file system,
+ * using {@code output}
+ */
 public class FileOutputStrategy implements OutputStrategy {
     // Used camel case due to the Java variable naming conventions
     private String baseDirectory;
