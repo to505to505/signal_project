@@ -6,6 +6,10 @@ import java.util.Random;
 
 import com.cardio_generator.outputs.OutputStrategy;
 
+/**
+ * The {@code AlertGenerator} class is responsible for generating alerts, using patient database,
+ * using {@code generate}
+ */
 public class AlertGenerator implements PatientDataGenerator {
     // Used upper snake case, because it is constant
     public static final Random RANDOM_GENERATOR = new Random();

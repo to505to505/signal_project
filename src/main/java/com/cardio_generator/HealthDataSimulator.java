@@ -15,6 +15,7 @@ import com.cardio_generator.outputs.FileOutputStrategy;
 import com.cardio_generator.outputs.OutputStrategy;
 import com.cardio_generator.outputs.TcpOutputStrategy;
 import com.cardio_generator.outputs.WebSocketOutputStrategy;
+import com.data_management.DataStorage;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,6 +26,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * The {@code HealthDataSimulator} class is responsible for simulating patient records stream,
+ * using {@link ECGDataGenerator}, {@link BloodSaturationDataGenerator}, {@link BloodPressureDataGenerator},
+ * {@link BloodLevelsDataGenerator}, {@link AlertGenerator}.
+ * Also has a functionality to print generated data.
+ */
 public class HealthDataSimulator {
 
     private static int patientCount = 50; // Default number of patients
@@ -43,7 +50,12 @@ public class HealthDataSimulator {
 
         scheduleTasksForPatients(patientIds);
     }
-
+    /**
+     * Function parses arguments from console/file/websocket/tcp as input
+     *
+     * @param args is the data storage system that provides access to patient
+     *
+     */
     private static void parseArguments(String[] args) throws IOException {
         for (int i = 0; i < args.length; i++) {
             switch (args[i]) {
@@ -104,7 +116,9 @@ public class HealthDataSimulator {
             }
         }
     }
-
+    /**
+     * Function prints possible options of the program and can define output method
+     */
     private static void printHelp() {
         System.out.println("Usage: java HealthDataSimulator [options]");
         System.out.println("Options:");
@@ -121,7 +135,12 @@ public class HealthDataSimulator {
         System.out.println(
                 "  This command simulates data for 100 patients and sends the output to WebSocket clients connected to port 8080.");
     }
-
+    /**
+     * Function initializes patient IDs, corresponding to the number of patients
+     *
+     * @param patientCount is the number of the patient
+     *
+     */
     private static List<Integer> initializePatientIds(int patientCount) {
         List<Integer> patientIds = new ArrayList<>();
         for (int i = 1; i <= patientCount; i++) {
@@ -129,7 +148,12 @@ public class HealthDataSimulator {
         }
         return patientIds;
     }
-
+    /**
+     * Function schedules Data Generators for particular patient
+     *
+     * @param patientIds is the list of the patient IDs
+     *
+     */
     private static void scheduleTasksForPatients(List<Integer> patientIds) {
         ECGDataGenerator ecgDataGenerator = new ECGDataGenerator(patientCount);
         BloodSaturationDataGenerator bloodSaturationDataGenerator = new BloodSaturationDataGenerator(patientCount);
