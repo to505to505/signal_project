@@ -24,18 +24,6 @@ public class AlertGenerator implements PatientDataGenerator {
         //Adopted changed name
         alertStates = new boolean[patientCount + 1];
     }
-    //please ignore the next commented lines
-    /*public void evaluateData(PatientData patient, PatientDataCriteria criteria){
-        HashMap<String, Double> metrics = patient.getMetrics();
-        for(Map.Entry<String, Double> metric: metrics.entrySet()){
-            if(criteria.checkCriteria(metric.getKey(), metric.getValue()) == false) {
-                triggerAlert(new Alert(patient.getPatientID(), metric.getKey(), (int)System.currentTimeMillis()));
-            }
-        }
-    }
-    public void triggerAlert(Alert alert){
-        System.out.println("Patient: " + alert.getPatientID() + " has " + alert.getCondition() + ", need immediate help");
-    }*/
     /**
      * Function outputs possible alerts due to its probability
      * @param patientId corresponds to the patientID
@@ -74,40 +62,3 @@ public class AlertGenerator implements PatientDataGenerator {
         }
     }
 }
-//please ignore the next commented lines
-/*class PatientDataCriteria{
-
-
-    private HashMap<String, CriteriaBounds> criterias;
-    public PatientDataCriteria(){
-        criterias = new HashMap<String, CriteriaBounds>();
-    }
-    public PatientDataCriteria(HashMap<String, CriteriaBounds> criterias) {
-        this.criterias = criterias;
-    }
-    public void addCriteria(String featureName, Double leftBound, Double rightBound){
-        criterias.put(featureName, new CriteriaBounds(leftBound, rightBound));
-    }
-    public boolean checkCriteria(String featureName, Double val){
-        if(criterias.get(featureName).getLeftBound() > val || criterias.get(featureName).getRightBound() < val)
-            return false;
-        return true;
-    }
-}
-class CriteriaBounds{
-    public Double getLeftBound() {
-        return leftBound;
-    }
-    public Double getRightBound() {
-        return rightBound;
-    }
-
-    public CriteriaBounds(Double leftBound, Double rightBound) {
-        this.leftBound = leftBound;
-        this.rightBound = rightBound;
-    }
-
-    Double leftBound;
-    Double rightBound;
-
-}*/
