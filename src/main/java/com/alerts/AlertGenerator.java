@@ -47,7 +47,8 @@ public class AlertGenerator {
         ArrayList<PatientRecord> patientRecords = dataAccess.getData();
 
         for (PatientRecord record : patientRecords) {
-            analyzeRecord(record);
+            if(record.getPatientId() == patient.getPatientId())
+                analyzeRecord(record);
         }
     }
     private void analyzeRecord(PatientRecord record) {
