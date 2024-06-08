@@ -2,8 +2,8 @@ package com.alerts;
 
 public class BloodOxygenAlert extends Alert {
 
-    public BloodOxygenAlert(String patientId, String condition, long timestamp) {
+    public BloodOxygenAlert(String patientId, long timestamp) {
 
-        super(patientId, condition, timestamp);
+        super(patientId, "Blood Oxygen alert", timestamp);
     }
 }
