@@ -5,8 +5,7 @@ import java.util.List;
 
 /**
  * Represents a patient and manages their medical records.
- * This class stores patient-specific data, allowing for the addition and
- * retrieval
+ * This class stores patient-specific data, allowing for the addition and retrieval
  * of medical records based on specified criteria.
  */
 public class Patient {
@@ -52,7 +51,20 @@ public class Patient {
      *         range
      */
     public List<PatientRecord> getRecords(long startTime, long endTime) {
-        // TODO Implement and test this method
-        return new ArrayList<>();
+        List<PatientRecord> filteredRecords = new ArrayList<>();
+        for (PatientRecord record : patientRecords) {
+            if (record.getTimestamp() >= startTime && record.getTimestamp() <= endTime) {
+                filteredRecords.add(record);
+            }
+        }
+        return filteredRecords;
+    }
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public List<PatientRecord> getPatientRecords() {
+        return patientRecords;
     }
 }

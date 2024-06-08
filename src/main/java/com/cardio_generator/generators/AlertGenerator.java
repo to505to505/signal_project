@@ -1,64 +1,76 @@
 package com.cardio_generator.generators;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-
 import com.cardio_generator.outputs.OutputStrategy;
 
-/**
- * The {@code AlertGenerator} class is responsible for generating alerts, using patient database,
- * using {@code generate}
- */
 public class AlertGenerator implements PatientDataGenerator {
-    // Used upper snake case, because it is constant
     public static final Random RANDOM_GENERATOR = new Random();
-    // Used camel case due to the Java variable naming conventions
-    private boolean[] alertStates; // false = resolved, true = pressed
+    private boolean[] alertStates;
 
-    /**
-     * Function initializes alert states array.
-     * @param patientCount corresponds number of observed patients
-     */
     public AlertGenerator(int patientCount) {
-        //Adopted changed name
         alertStates = new boolean[patientCount + 1];
     }
-    /**
-     * Function outputs possible alerts due to its probability
-     * @param patientId corresponds to the patientID
-     * @param outputStrategy corresponds to used output strategy
-     */
+
     @Override
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {
-            //Adopted changed name
+            long timestamp = System.currentTimeMillis();
             if (alertStates[patientId]) {
-                //Adopted changed name
                 if (RANDOM_GENERATOR.nextDouble() < 0.9) { // 90% chance to resolve
-                    //Adopted changed name
                     alertStates[patientId] = false;
-                    // Output the alert
-                    outputStrategy.output(patientId, System.currentTimeMillis(), "Alert", "resolved");
+                    outputStrategy.output(patientId, timestamp, "Alert Resolved", "Alert resolved for patient " + patientId);
                 }
             } else {
-                //Used camel case due to the Java variable naming conventions
-                double lamda = 0.1; // Average rate (alerts per period), adjust based on desired frequency
-                //Adopted changed name
-                double p = -Math.expm1(-lamda); // Probability of at least one alert in the period
-                //Adopted changed name
-                boolean alertTriggered = RANDOM_GENERATOR.nextDouble() < p;
+                int[] systolicReadings = getSystolicReadings(patientId);
+                int[] diastolicReadings = getDiastolicReadings(patientId);
 
-                if (alertTriggered) {
-                    //Adopted changed name
-                    alertStates[patientId] = true;
-                    // Output the alert
-                    outputStrategy.output(patientId, System.currentTimeMillis(), "Alert", "triggered");
+                if (isTrendAlert(systolicReadings) || isTrendAlert(diastolicReadings)) {
+                    triggerAlert(patientId, "Trend Alert", outputStrategy, timestamp);
+                }
+
+                if (isCriticalThresholdAlert(systolicReadings, diastolicReadings)) {
+                    triggerAlert(patientId, "Critical Threshold Alert", outputStrategy, timestamp);
                 }
             }
         } catch (Exception e) {
-            System.err.println("An error occurred while generating alert data for patient " + patientId);
             e.printStackTrace();
         }
+    }
+
+    private void triggerAlert(int patientId, String alertType, OutputStrategy outputStrategy, long timestamp) {
+        alertStates[patientId] = true;
+        outputStrategy.output(patientId, timestamp, alertType, "Patient: " + patientId + " has " + alertType + ", need immediate help");
+    }
+
+    private boolean isTrendAlert(int[] readings) {
+        if (readings.length < 3) return false;
+        for (int i = 2; i < readings.length; i++) {
+            if (Math.abs(readings[i] - readings[i - 1]) > 10 && Math.abs(readings[i - 1] - readings[i - 2]) > 10) {
+                if ((readings[i] > readings[i - 1] && readings[i - 1] > readings[i - 2]) ||
+                        (readings[i] < readings[i - 1] && readings[i - 1] < readings[i - 2])) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean isCriticalThresholdAlert(int[] systolicReadings, int[] diastolicReadings) {
+        for (int systolic : systolicReadings) {
+            if (systolic > 180 || systolic < 90) return true;
+        }
+        for (int diastolic : diastolicReadings) {
+            if (diastolic > 120 || diastolic < 60) return true;
+        }
+        return false;
+    }
+
+    // Dummy methods to simulate retrieval of readings, replace with actual data access methods
+    private int[] getSystolicReadings(int patientId) {
+        return new int[]{120, 130, 140}; // Example data
+    }
+
+    private int[] getDiastolicReadings(int patientId) {
+        return new int[]{80, 85, 90}; // Example data
     }
 }
