@@ -1,7 +1,7 @@
 package com.main;
 
 import com.cardio_generator.HealthDataSimulator;
-import com.cardio_generator.generators.DataAccess;
+import com.data_management.DataAccess;
 import com.data_management.DataStorage;
 //import org.junit.Test;
 

@@ -108,4 +108,8 @@ public class DataStorage {
             alertGenerator.evaluateData(patient);
         }
     }
+
+    public List<PatientRecord> getPatientRecords(int patientId) {
+        return patientMap.get(patientId).getPatientRecords();
+    }
 }
