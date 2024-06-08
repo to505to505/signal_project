@@ -60,6 +60,31 @@ public class Patient {
         return filteredRecords;
     }
 
+    public ArrayList<PatientRecord> getRecordsLast(int NumRecords, String recordType) {
+        int u = 0;
+        ArrayList<PatientRecord> lastRecords = new ArrayList<>();
+        if (patientRecords.size() == 0) {
+            return null;
+            
+        }
+        for (int i = patientRecords.size() - 1; i >= 0; i--) {
+
+            if(u == NumRecords)
+                break;
+
+            PatientRecord record = patientRecords.get(i);
+            if (record.getRecordType().equals(recordType)) {
+                u++;
+                lastRecords.add(record);
+            }
+            if(u == NumRecords)
+                break;
+        }
+        return lastRecords;
+        
+    }
+
+
     public int getPatientId() {
         return patientId;
     }

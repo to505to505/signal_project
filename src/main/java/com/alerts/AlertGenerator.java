@@ -1,23 +1,22 @@
 package com.alerts;
 
-import com.alerts.Alert;
+import com.data_management.DataAccess;
 import com.data_management.DataStorage;
 import com.data_management.Patient;
+import com.data_management.PatientRecord;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
  * The {@code AlertGenerator} class is responsible for monitoring patient data
  * and generating alerts when certain predefined conditions are met. This class
  * relies on a {@link DataStorage} instance to access patient data and evaluate
  * it against specific health criteria.
- * It takes a list of {@link AlertStrategy} objects that define the conditions
- * to be checked and allows for adding new strategies dynamically.
  */
 public class AlertGenerator {
-    private final DataStorage dataStorage;
-    
+    private DataStorage dataStorage;
+    private DataAccess dataAccess;
 
     /**
      * Constructs an {@code AlertGenerator} with a specified {@code DataStorage}.
@@ -29,13 +28,9 @@ public class AlertGenerator {
      */
     public AlertGenerator(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
-        
     }
-
-    public AlertGenerator(DataStorage dataStorage, AlertStrategy... alertStrategies) {
-        this.dataStorage = dataStorage;
-        this.alertStrategies = new ArrayList<>();
-        Collections.addAll(this.alertStrategies, alertStrategies);
+    public AlertGenerator(DataAccess dataAccess) {
+        this.dataAccess = dataAccess;
     }
 
     /**
@@ -48,12 +43,36 @@ public class AlertGenerator {
      *
      * @param patient the patient data to evaluate for alert conditions
      */
-    public void evaluateData(Patient patient) {
-        for (AlertStrategy strategy : alertStrategies) {
-            Alert alert = strategy.checkAlert(patient);
-            if (alert != null) {
-                triggerAlert(alert);
-            }
+    public void evaluateData(Patient patient) throws IOException {
+        ArrayList<PatientRecord> patientRecords = dataAccess.getData();
+
+        for (PatientRecord record : patientRecords) {
+            analyzeRecord(record);
+        }
+    }
+    private void analyzeRecord(PatientRecord record) {
+        int patientId = record.getPatientId();
+        String recordType = record.getRecordType();
+        double measurementValue = record.getMeasurementValue();
+        long timestamp = record.getTimestamp();
+
+        switch (recordType) {
+            case "Heart Rate":
+                if (measurementValue < 60 || measurementValue > 100) {
+                    triggerAlert(new Alert(Integer.toString(patientId), "Abnormal heart rate: " + measurementValue, (int) timestamp));
+                }
+                break;
+            case "Systolic Blood Pressure":
+                if (measurementValue < 90 || measurementValue > 140) {
+                    triggerAlert(new Alert(Integer.toString(patientId), "Critical systolic blood pressure: " + measurementValue, (int) timestamp));
+                }
+                break;
+            case "Diastolic Blood Pressure":
+                if (measurementValue < 60 || measurementValue > 90) {
+                    triggerAlert(new Alert(Integer.toString(patientId), "Critical diastolic blood pressure: " + measurementValue, (int) timestamp));
+                }
+                break;
+            // Add more cases as needed for other measurement types
         }
     }
 
@@ -66,11 +85,7 @@ public class AlertGenerator {
      * @param alert the alert object containing details about the alert condition
      */
     private void triggerAlert(Alert alert) {
-        System.out.println("ALERT: " + alert.getPatientId() + " - " + alert.getCondition());
+        System.out.println("ALERT for Patient " + alert.getPatientId() + ": " + alert.getCondition() + " at " + alert.getTimestamp());
         // Implementation might involve logging the alert or notifying staff
-    }
-
-    public void addAlertStrategy(AlertStrategy alertStrategy) {
-        alertStrategies.add(alertStrategy);
     }
 }
