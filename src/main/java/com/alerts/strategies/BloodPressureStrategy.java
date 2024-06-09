@@ -70,7 +70,7 @@ public class BloodPressureStrategy implements AlertStrategy {
       PatientRecord lastRecordSys = null;
       PatientRecord lastRecordDia = null;
       if (lastRecordsSys.size() == 0) {
-        System.out.println("No records found");
+        
         return null;
         
       } else {

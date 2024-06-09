@@ -9,6 +9,7 @@ public class FileDataReader {
 
     public void readData(String outputDir, DataStorage dataStorage) {
         File directory = new File(outputDir);
+        dataStorage = DataStorage.getInstance();
         
         if (!directory.exists() ) {
             throw new IllegalArgumentException("The specified output directory does not exist or is not a directory.");
@@ -25,6 +26,7 @@ public class FileDataReader {
     }
 
     private void parseFile(File file, DataStorage dataStorage) {
+        dataStorage = DataStorage.getInstance();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {

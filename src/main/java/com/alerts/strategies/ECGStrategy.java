@@ -17,6 +17,8 @@ public Alert checkAlert(Patient patient) {
     ArrayList<Long> beatTimestamps = new ArrayList<>();
     int j =0;
     for (PatientRecord record : lastRecord) {
+
+    
         if (isBeat(record)) {
             
             beatTimestamps.add(record.getTimestamp());
@@ -36,7 +38,7 @@ public Alert checkAlert(Patient patient) {
 
     
         if (bpm > HEARTRATE_TOP) {
-            return new Alert(patient.getPatientId(), "Heart rate too fast, ECG alert", lastRecord.get(lastRecord.size()-1).getTimestamp());
+            return new Alert(patient.getPatientId(), "Heart rate too fast, ECG alert", System.currentTimeMillis()) ;
         } else if (bpm < HEARTRATE_BOTTOM) {
             return new Alert(patient.getPatientId(), "Heart rate too slow, ECG alert", lastRecord.get(lastRecord.size()-1).getTimestamp());
         } 
@@ -73,6 +75,6 @@ public Alert checkAlert(Patient patient) {
 
 private boolean isBeat(PatientRecord record) {
    
-    return (record.getMeasurementValue()) > 0.3;
+    return Math.abs(record.getMeasurementValue()) > 0.3;
 }
 }

@@ -17,6 +17,11 @@ public class BloodSaturationStrategy implements AlertStrategy {
     
     @Override
     public Alert checkAlert(Patient patient) {
+      try {
+        Thread.sleep(1000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
       PatientRecord lastRecord = null;
       BloodOxygenAlertFactory factory = new BloodOxygenAlertFactory();
       ArrayList<PatientRecord> lastSaturationRecordLists = patient.getRecordsLast(1, "Saturation");

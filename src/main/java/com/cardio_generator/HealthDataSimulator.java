@@ -3,7 +3,12 @@ package com.cardio_generator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import com.cardio_generator.generators.AlertGenerator;
+
+import javax.xml.crypto.Data;
+import com.data_management.DataStorage;
+import com.data_management.Patient;
+
+// import com.cardio_generator.generators.AlertGenerator;
 import com.cardio_generator.generators.BloodPressureDataGenerator;
 import com.cardio_generator.generators.BloodSaturationDataGenerator;
 import com.cardio_generator.generators.BloodLevelsDataGenerator;
@@ -13,13 +18,17 @@ import com.cardio_generator.outputs.FileOutputStrategy;
 import com.cardio_generator.outputs.OutputStrategy;
 import com.cardio_generator.outputs.TcpOutputStrategy;
 import com.cardio_generator.outputs.WebSocketOutputStrategy;
+import com.data_management.DataStorage;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.io.IOException;
 import java.nio.file.Files;
+import com.alerts.AlertGenerator;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import com.cardio_generator.outputs.FileOutputStrategy;
 import java.util.ArrayList;
 
 /**
@@ -33,7 +42,7 @@ public class HealthDataSimulator {
     private static volatile HealthDataSimulator instance;
     private static int patientCount = 50; // Default number of patients
     private ScheduledExecutorService scheduler;
-    private OutputStrategy outputStrategy = new ConsoleOutputStrategy(); // Default output strategy
+    private OutputStrategy outputStrategy = new FileOutputStrategy("dataFolder/"); // Default output strategy
     private final Random random = new Random();
 
 
@@ -147,20 +156,30 @@ public class HealthDataSimulator {
     }
 
     private void scheduleTasksForPatients(List<Integer> patientIds) {
+        DataStorage dataStorage = new DataStorage();
         ECGDataGenerator ecgDataGenerator = new ECGDataGenerator(patientCount);
         BloodSaturationDataGenerator bloodSaturationDataGenerator = new BloodSaturationDataGenerator(patientCount);
         BloodPressureDataGenerator bloodPressureDataGenerator = new BloodPressureDataGenerator(patientCount);
         BloodLevelsDataGenerator bloodLevelsDataGenerator = new BloodLevelsDataGenerator(patientCount);
-        AlertGenerator alertGenerator = new AlertGenerator(patientCount);
+        AlertGenerator alertGenerator = new AlertGenerator(dataStorage);
 
         for (int patientId : patientIds) {
-            scheduleTask(() -> ecgDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.SECONDS);
-            scheduleTask(() -> bloodSaturationDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.SECONDS);
+            // scheduleTask(() -> ecgDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.MINUTES);
+            // scheduleTask(() -> bloodSaturationDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.SECONDS);
             scheduleTask(() -> bloodPressureDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.MINUTES);
             scheduleTask(() -> bloodLevelsDataGenerator.generate(patientId, outputStrategy), 2, TimeUnit.MINUTES);
-            scheduleTask(() -> alertGenerator.generate(patientId, outputStrategy), 20, TimeUnit.SECONDS);
+            // scheduleTask(() -> alertGenerator.eva(patientId, outputStrategy), 20, TimeUnit.SECONDS);
         }
     }
+
+    // private void checkAllPatients(AlertGenerator alertGenerator) {
+    //     // Check all patients for alerts
+    //     DataStorage dataStorage = new DataStorage();
+    //     for(Patient patient : dataStorage.getAllPatients()) {
+    //         alertGenerator.evaluateData(patient);
+    //     }
+    //     alertGenerator.evaluateData(patientId, outputStrategy), 20, TimeUnit.SECONDS);
+    // }
 
     private void scheduleTask(Runnable task, long period, TimeUnit timeUnit) {
         scheduler.scheduleAtFixedRate(task, random.nextInt(5), period, timeUnit);

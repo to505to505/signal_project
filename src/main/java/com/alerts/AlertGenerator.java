@@ -85,7 +85,6 @@ public class AlertGenerator {
         this.alertStrategies.add(new HypotensiveHypoxemiaStrategy());
         this.alertStrategies.add(new BloodPressureStrategy());
         this.alertStrategies.add(new BloodSaturationStrategy());
-        
         this.alertStrategies.add(new ECGStrategy());
     }
     public static void main(String[] args) {
