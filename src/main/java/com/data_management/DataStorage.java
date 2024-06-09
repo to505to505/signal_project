@@ -132,4 +132,5 @@ public class DataStorage {
     public List<PatientRecord> getPatientRecords(int patientId) {
         return patientMap.get(patientId).getPatientRecords();
     }
+    
 }

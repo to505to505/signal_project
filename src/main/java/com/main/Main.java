@@ -11,15 +11,19 @@ import com.data_management.Patient;
 import java.io.IOException;
 
 public class Main {
-    //@Test
+    
     public static void main(String[] args) throws IOException {
         if (args.length > 0 && args[0].equals("DataAccess")) {
             DataAccess.main(new String[]{});
         }
         else if (args.length > 0 && args[0].equals("DataStorage")) {
-            DataStorage.main(new String[]{});
+            try {
+            DataStorage.main(args);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
-            HealthDataSimulator.main(new String[]{});
+            HealthDataSimulator.main(args);
         }
     
     AlertGenerator alertGenerator = new AlertGenerator(DataStorage.getInstance());
@@ -31,16 +35,20 @@ public class Main {
 
     FileDataReader fileDataReader = new FileDataReader("dataFolder/");
     fileDataReader.readData(DataStorage.getInstance());
-    // while (true) {
-    //     for(Patient patient : DataStorage.getInstance().getAllPatients()) {
+    DataStorage dataStorage = DataStorage.getInstance();
+    System.out.println(dataStorage.getAllPatients().size());
+
+    
+    while (true) {
+        for(Patient patient : DataStorage.getInstance().getAllPatients()) {
             
-    //         alertGenerator.evaluateData(patient);
-    //     }
-    //     try {
-    //         Thread.sleep(10000);
-    //     } catch (InterruptedException e) {
-    //         e.printStackTrace();
-    //     }
-    // }
+            alertGenerator.evaluateData(patient);
+        }
+        try {
+            Thread.sleep(10000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }
 }

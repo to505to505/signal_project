@@ -41,7 +41,7 @@ public class BloodSaturationDataGenerator implements PatientDataGenerator {
             newSaturationValue = Math.min(Math.max(newSaturationValue, 90), 100);
             lastSaturationValues[patientId] = newSaturationValue;
             outputStrategy.output(patientId, System.currentTimeMillis(), "Saturation",
-                    Double.toString(newSaturationValue) + "%");
+                    Double.toString(newSaturationValue));
         } catch (Exception e) {
             System.err.println("An error occurred while generating blood saturation data for patient " + patientId);
             e.printStackTrace(); // This will print the stack trace to help identify where the error occurred.

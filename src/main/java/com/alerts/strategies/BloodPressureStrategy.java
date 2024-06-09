@@ -77,9 +77,9 @@ public class BloodPressureStrategy implements AlertStrategy {
         lastRecordSys = lastRecordsSys.get(0);
       }
       if (lastRecordSys != null) {
-        System.out.println("High Systolic Blood Pressure Alert");
+        
         if (lastRecordSys.getMeasurementValue() > SYSTOLIC_THRESHOLD_TOP) {
-          System.out.println("High Systolic Blood Pressure Alert");
+          
           return factory.createAlert(patient.getPatientId(), "High Systolic Blood Pressure Alert",
               lastRecordSys.getTimestamp());
         }

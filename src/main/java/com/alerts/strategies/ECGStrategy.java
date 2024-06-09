@@ -26,7 +26,7 @@ public Alert checkAlert(Patient patient) {
             j++;
         }
     }
-
+    
 
     double totalInterval = 0;
     for (int i = 1; i < beatTimestamps.size(); i++) {
@@ -38,7 +38,7 @@ public Alert checkAlert(Patient patient) {
 
     
         if (bpm > HEARTRATE_TOP) {
-            return new Alert(patient.getPatientId(), "Heart rate too fast, ECG alert", System.currentTimeMillis()) ;
+            return new Alert(patient.getPatientId(), "Heart rate too fast, ECG alert", lastRecord.get(lastRecord.size()-1).getTimestamp()) ;
         } else if (bpm < HEARTRATE_BOTTOM) {
             return new Alert(patient.getPatientId(), "Heart rate too slow, ECG alert", lastRecord.get(lastRecord.size()-1).getTimestamp());
         } 

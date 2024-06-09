@@ -164,10 +164,10 @@ public class HealthDataSimulator {
         AlertGenerator alertGenerator = new AlertGenerator(dataStorage);
 
         for (int patientId : patientIds) {
-            // scheduleTask(() -> ecgDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.MINUTES);
-            // scheduleTask(() -> bloodSaturationDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.SECONDS);
-            scheduleTask(() -> bloodPressureDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.MINUTES);
-            scheduleTask(() -> bloodLevelsDataGenerator.generate(patientId, outputStrategy), 2, TimeUnit.MINUTES);
+            scheduleTask(() -> ecgDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.SECONDS);
+            scheduleTask(() -> bloodSaturationDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.SECONDS);
+            scheduleTask(() -> bloodPressureDataGenerator.generate(patientId, outputStrategy), 1, TimeUnit.SECONDS);
+            scheduleTask(() -> bloodLevelsDataGenerator.generate(patientId, outputStrategy), 2, TimeUnit.SECONDS);
             // scheduleTask(() -> alertGenerator.eva(patientId, outputStrategy), 20, TimeUnit.SECONDS);
         }
     }

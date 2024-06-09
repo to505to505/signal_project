@@ -35,9 +35,11 @@ public class AlertGenerator {
      *                    data
      */
     public AlertGenerator(DataStorage dataStorage) {
+        
         this.triggeredAlerts = new ArrayList<>();
         this.dataStorage = dataStorage;
         this.alertStrategies = new ArrayList<>();
+        initializeAlertStrategies();
     }
    
 
@@ -52,7 +54,7 @@ public class AlertGenerator {
      * @param patient the patient data to evaluate for alert conditions
      */
     public void evaluateData(Patient patient) throws IOException {
-        initializeAlertStrategies();
+        
         for(AlertStrategy strategy : alertStrategies){
             Alert alert = strategy.checkAlert(patient);
             if(alert != null){

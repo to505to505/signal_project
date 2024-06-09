@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.xml.crypto.Data;
+
 /**
  * Reads data from files in a specified directory and stores it in the data storage.
  * This class implements the {@link DataReader} interface to provide file-based data reading functionality.
@@ -35,12 +37,12 @@ public class FileDataReader implements DataReader {
         if (!directory.exists() || !directory.isDirectory()) {
             throw new IllegalArgumentException("The specified output directory does not exist or is not a directory.");
         }
-
+        DataStorage storage = DataStorage.getInstance();
         File[] files = directory.listFiles();
         if (files != null) {
             for (File file : files) {
                 if (file.isFile()) {
-                    parseFile(file, dataStorage);
+                    parseFile(file, storage);
                 }
             }
         }
@@ -53,6 +55,7 @@ public class FileDataReader implements DataReader {
      * @param dataStorage the storage where data will be stored
      */
     private void parseFile(File file, DataStorage dataStorage) {
+        DataStorage storage = DataStorage.getInstance();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -63,7 +66,8 @@ public class FileDataReader implements DataReader {
                     String recordType = parts[2];
                     double measurementValue = Double.parseDouble(parts[3]);
 
-                    dataStorage.addPatientData(patientId, measurementValue, recordType, timestamp);
+                    // Add the parsed data to the data storage
+                    storage.addPatientData(patientId, measurementValue, recordType, timestamp);
                 }
             }
         } catch (IOException e) {
