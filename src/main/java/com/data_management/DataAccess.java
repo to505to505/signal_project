@@ -23,7 +23,7 @@ public class DataAccess {
         return dataOutput;
     }
 
-    private ArrayList<PatientRecord> dataConverter(HashMap<String, Object> input){
+    public ArrayList<PatientRecord> dataConverter(HashMap<String, Object> input){
         ArrayList<PatientRecord> output = new ArrayList<>();
         ArrayList<LinkedHashMap<String, Object>> patientsData = (ArrayList<LinkedHashMap<String, Object>>) input.get("patients");
 
