@@ -5,8 +5,8 @@ import com.alerts.BloodPressureAlert;
 
 public class BloodPressureAlertFactory extends AlertFactory {
 
-    
-    public Alert createAlert(String patientId, String condition, long timestamp) {
-        return new BloodPressureAlert(patientId, condition, timestamp);
+    @Override
+    public Alert createAlert(int patientId, String condition, long timestamp) {
+        return new BloodPressureAlert(patientId, timestamp);
     }
 }

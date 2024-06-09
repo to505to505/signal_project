@@ -3,8 +3,8 @@ package com.alerts;
 public class BloodPressureAlert extends Alert {
 
 
-    public BloodPressureAlert(String patientId, String condition, long timestamp) {
+    public BloodPressureAlert(int patientId, long timestamp) {
         
-        super(patientId, condition, timestamp);
+        super(patientId, "Blood Pressure Alert", timestamp);
     }
 }

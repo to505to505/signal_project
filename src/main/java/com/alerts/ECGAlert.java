@@ -2,8 +2,8 @@ package com.alerts;
 
 public class ECGAlert extends Alert {
 
-    public ECGAlert(String patientId, String condition, long timestamp) {
+    public ECGAlert(int patientId, long timestamp) {
         
-        super(patientId, condition, timestamp);
+        super(patientId, "ECG Alert", timestamp);
     }
 }
