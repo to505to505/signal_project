@@ -4,7 +4,7 @@ Software Engineering - Project Groups 8
 - Dmitrii Sakharov i6358438
 
 # Information about the project
-In order to get a correct alerts for measurments per minute, it's required to generate 1 minute worth of data, otherwise the alerts are triggered due to insufficient data. You can finds all the unit tests (all passed) in src/test/java/com.
+In order to get correct alerts for measurments per minute, it's required to generate 1 minute worth of data, otherwise the alerts are triggered due to insufficient data. You can finds all the unit tests (all passed) in src/test/java/com.
 
 ## Cardio Data Simulator
 
