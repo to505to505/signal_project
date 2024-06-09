@@ -22,14 +22,14 @@ public class FileDataReaderTest {
     public void setUp() throws IOException {
         dataStorage = new DataStorage();
         
-        fileDataReader = new FileDataReader();
+        fileDataReader = new FileDataReader(testFilePath);
     }
 
     @Test
-    public void testReadData() {
+    public void testReadData() throws IOException {
         
         DataStorage dataStorage = new DataStorage();
-        fileDataReader.readData(testFilePath, dataStorage);
+        fileDataReader.readData(dataStorage);
         Patient patient = dataStorage.getPatient(1);
         System.out.println(dataStorage.getPatient(1));
         PatientRecord record = patient.getRecordsLast(1, "Temperature").get(0);

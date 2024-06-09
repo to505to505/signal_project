@@ -44,7 +44,7 @@ public class WebSocketClientTest {
     @Test
     public void testReadData() throws Exception {
         // Connect the WebSocket client
-        webSocketClient.connect(dataStorage);
+        webSocketClient.connect();
 
         // Simulate sending data to the WebSocket server
         mockServer.sendMessage("1,98.6,Temperature,1609459200000");
@@ -53,7 +53,7 @@ public class WebSocketClientTest {
         webSocketClient.awaitMessage();
 
         // Verify the data was added to DataStorage
-        List<PatientRecord> records = dataStorage.getRecords(1, 1609459200000L, 1609459200000L);
+        List<PatientRecord> records = DataStorage.getInstance().getRecords(1, 1609459200000L, 1609459200000L);
         assertEquals(1, records.size());
         assertEquals(98.6, records.get(0).getMeasurementValue(), 0.01);
         assertEquals("Temperature", records.get(0).getRecordType());

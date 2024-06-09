@@ -29,8 +29,8 @@ public class Main {
         e.printStackTrace();
     }
 
-    FileDataReader fileDataReader = new FileDataReader();
-    fileDataReader.readData("dataFolder/", DataStorage.getInstance());
+    FileDataReader fileDataReader = new FileDataReader("dataFolder/");
+    fileDataReader.readData(DataStorage.getInstance());
     // while (true) {
     //     for(Patient patient : DataStorage.getInstance().getAllPatients()) {
             

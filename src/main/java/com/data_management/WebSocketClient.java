@@ -7,19 +7,42 @@ import java.net.http.WebSocket;
 import java.net.http.WebSocket.Listener;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.CountDownLatch;
+import java.io.IOException;
 
-public class WebSocketClient {
+/**
+ * WebSocket client for receiving real-time data and storing it in the data storage.
+ * This class implements the {@link DataReader} interface to provide WebSocket-based data reading functionality.
+ */
+public class WebSocketClient implements DataReader {
     private WebSocket webSocket;
     private final String serverUri;
     private final CountDownLatch messageLatch = new CountDownLatch(1);
     private DataStorage dataStorage;
 
+    /**
+     * Constructs a WebSocketClient with the specified server URI.
+     *
+     * @param serverUri the URI of the WebSocket server
+     */
     public WebSocketClient(String serverUri) {
         this.serverUri = serverUri;
     }
 
-    public void connect(DataStorage dataStorage) {
+    /**
+     * Connects to the WebSocket server and starts receiving data.
+     *
+     * @param dataStorage the storage where data will be stored
+     */
+    @Override
+    public void readData(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
+        connect();
+    }
+
+    /**
+     * Connects to the WebSocket server.
+     */
+    public void connect() {
         try {
             HttpClient client = HttpClient.newHttpClient();
             webSocket = client.newWebSocketBuilder()
@@ -30,8 +53,29 @@ public class WebSocketClient {
         }
     }
 
+    /**
+     * Waits for a message to be received from the WebSocket server.
+     *
+     * @throws InterruptedException if the waiting is interrupted
+     */
     public void awaitMessage() throws InterruptedException {
         messageLatch.await();
+    }
+
+    /**
+     * Starts the WebSocket client. This method is a placeholder and is not used.
+     */
+    @Override
+    public void start() {
+        // Not needed for WebSocket-based data reader
+    }
+
+    /**
+     * Stops the WebSocket client. This method is a placeholder and is not used.
+     */
+    @Override
+    public void stop() {
+        // Not needed for WebSocket-based data reader
     }
 
     private class WebSocketListener implements Listener {
@@ -56,6 +100,7 @@ public class WebSocketClient {
         }
 
         private void processMessage(String message) {
+            dataStorage = DataStorage.getInstance();
             String[] parts = message.split(",");
             if (parts.length == 4) {
                 try {
