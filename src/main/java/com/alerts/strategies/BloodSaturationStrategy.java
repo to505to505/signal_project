@@ -27,7 +27,7 @@ public class BloodSaturationStrategy implements AlertStrategy {
       
       ArrayList<PatientRecord> lastTen = patient.getRecordsLastTenMinue( "Saturation");
     
-      if (Math.abs(lastTen.getFirst().getMeasurementValue() - lastTen.getLast().getMeasurementValue()) >lastTen.getFirst().getMeasurementValue()*0.05 ) {
+      if (Math.abs(lastTen.get(0).getMeasurementValue() - lastTen.get(lastTen.size()-1).getMeasurementValue()) >lastTen.get(0).getMeasurementValue()*0.05 ) {
             return factory.createAlert(patient.getPatientId(), "Saturation Drop", System.currentTimeMillis());
           }
       

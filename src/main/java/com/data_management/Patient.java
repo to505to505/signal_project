@@ -68,7 +68,7 @@ public class Patient {
             return null;
             
         } else {
-            long timeNow = patientRecords.getLast().getTimestamp();
+            long timeNow = patientRecords.get(patientRecords.size()-1).getTimestamp();
             return getRecords(timeNow-10000*60, timeNow);
         }
        
@@ -79,7 +79,7 @@ public class Patient {
             return null;
             
         } else {
-            long timeNow = patientRecords.getLast().getTimestamp();
+            long timeNow = patientRecords.get(patientRecords.size()-1).getTimestamp();
             return getRecords(timeNow-10*60*1000, timeNow);
         }
     }

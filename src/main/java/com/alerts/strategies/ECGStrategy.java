@@ -36,9 +36,9 @@ public Alert checkAlert(Patient patient) {
 
     
         if (bpm > HEARTRATE_TOP) {
-            return new Alert(patient.getPatientId(), "Heart rate too fast, ECG alert", lastRecord.getLast().getTimestamp());
+            return new Alert(patient.getPatientId(), "Heart rate too fast, ECG alert", lastRecord.get(lastRecord.size()-1).getTimestamp());
         } else if (bpm < HEARTRATE_BOTTOM) {
-            return new Alert(patient.getPatientId(), "Heart rate too slow, ECG alert", lastRecord.getLast().getTimestamp());
+            return new Alert(patient.getPatientId(), "Heart rate too slow, ECG alert", lastRecord.get(lastRecord.size()-1).getTimestamp());
         } 
 
         ArrayList<Long> beatIntervals = new ArrayList<>();
@@ -57,7 +57,7 @@ public Alert checkAlert(Patient patient) {
    
         for (long interval : beatIntervals) {
             if (interval < lowerThreshold || interval > upperThreshold) {
-                return new Alert(patient.getPatientId(), "ECG strange pattern Alert", lastRecord.getLast().getTimestamp());
+                return new Alert(patient.getPatientId(), "ECG strange pattern Alert", lastRecord.get(lastRecord.size()-1).getTimestamp());
                 
             }
         }

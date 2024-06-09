@@ -67,7 +67,7 @@ public class AlertGenerator {
      *
      * @param alert the alert object containing details about the alert condition
      */
-    private void triggerAlert(Alert alert) {
+    public void triggerAlert(Alert alert) {
         System.out.println("Patient  " + alert.getPatientId() +" has the following alrt:  " +alert.getCondition() + ". Time:  " + alert.getTimestamp());
         // Implementation might involve logging the alert or notifying staff
     }
