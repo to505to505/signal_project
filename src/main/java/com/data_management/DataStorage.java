@@ -15,7 +15,7 @@ import com.alerts.AlertGenerator;
  */
 public class DataStorage {
     private ConcurrentMap<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
-    public static DataStorage instance;
+    private static volatile DataStorage instance;
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
@@ -36,7 +36,7 @@ public class DataStorage {
         }
         return instance;
     }
-    
+
     /**
      * Adds or updates patient data in the storage.
      * If the patient does not exist, a new Patient object is created and added to
@@ -91,6 +91,10 @@ public class DataStorage {
         return new ArrayList<>(patientMap.values());
     }
 
+    public Patient getPatient(int patientId) {
+        return patientMap.get(patientId);
+    }
+
     /**
      * The main method for the DataStorage class.
      * Initializes the system, reads data into storage, and continuously monitors
@@ -101,7 +105,7 @@ public class DataStorage {
     public static void main(String[] args) throws IOException {
         // DataReader is not defined in this scope, should be initialized appropriately.
         // DataReader reader = new SomeDataReaderImplementation("path/to/data");
-        DataStorage storage = new DataStorage();
+        DataStorage storage =  DataStorage.getInstance();
 
         // Assuming the reader has been properly initialized and can read data into the
         // storage

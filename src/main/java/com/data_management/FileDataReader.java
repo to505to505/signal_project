@@ -9,7 +9,8 @@ public class FileDataReader {
 
     public void readData(String outputDir, DataStorage dataStorage) {
         File directory = new File(outputDir);
-        if (!directory.exists() || !directory.isDirectory()) {
+        
+        if (!directory.exists() ) {
             throw new IllegalArgumentException("The specified output directory does not exist or is not a directory.");
         }
 

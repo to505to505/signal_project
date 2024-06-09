@@ -15,27 +15,29 @@ public class FileDataReaderTest {
 
     private DataStorage dataStorage;
     private FileDataReader fileDataReader;
-    private String testFilePath = "testData.txt";
+    private String testFilePath = "dataFolder/";
+
 
     @Before
     public void setUp() throws IOException {
         dataStorage = new DataStorage();
-        createTestFile();
+        
         fileDataReader = new FileDataReader();
     }
 
     @Test
     public void testReadData() {
+        
+        DataStorage dataStorage = new DataStorage();
         fileDataReader.readData(testFilePath, dataStorage);
-        List<PatientRecord> records = dataStorage.getRecords(1, 1609459200000L, 1609459200000L);
-        assertEquals(1, records.size());
-        assertEquals(98.6, records.get(0).getMeasurementValue(), 0.01);
-        assertEquals("Temperature", records.get(0).getRecordType());
+        Patient patient = dataStorage.getPatient(1);
+        System.out.println(dataStorage.getPatient(1));
+        PatientRecord record = patient.getRecordsLast(1, "Temperature").get(0);
+
+       
+        assertEquals(98.6, record.getMeasurementValue(), 0.01);
+        assertEquals(1609459200000L, record.getTimestamp());
     }
 
-    private void createTestFile() throws IOException {
-        FileWriter writer = new FileWriter(testFilePath);
-        writer.write("1,98.6,Temperature,1609459200000\n");
-        writer.close();
-    }
+    
 }

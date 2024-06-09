@@ -46,6 +46,7 @@ public class BloodPressureStrategy implements AlertStrategy {
     }
     @Override
     public Alert checkAlert(Patient patient) {
+      
       BloodPressureAlertFactory factory = new BloodPressureAlertFactory();
       Alert alert = checkTrend("SystolicPressure", patient, factory);
       Alert alert2 = checkTrend("DiastolicPressure", patient, factory);
@@ -64,11 +65,21 @@ public class BloodPressureStrategy implements AlertStrategy {
       } 
       
 
-
-      PatientRecord lastRecordSys = patient.getRecordsLast(1, "SystolicPressure").get(0);
-      PatientRecord lastRecordDia = patient.getRecordsLast(1, "DiastolicPressure").get(0);
+      
+      ArrayList<PatientRecord> lastRecordsSys = patient.getRecordsLast(1, "SystolicPressure");
+      PatientRecord lastRecordSys = null;
+      PatientRecord lastRecordDia = null;
+      if (lastRecordsSys.size() == 0) {
+        System.out.println("No records found");
+        return null;
+        
+      } else {
+        lastRecordSys = lastRecordsSys.get(0);
+      }
       if (lastRecordSys != null) {
+        System.out.println("High Systolic Blood Pressure Alert");
         if (lastRecordSys.getMeasurementValue() > SYSTOLIC_THRESHOLD_TOP) {
+          System.out.println("High Systolic Blood Pressure Alert");
           return factory.createAlert(patient.getPatientId(), "High Systolic Blood Pressure Alert",
               lastRecordSys.getTimestamp());
         }
@@ -77,6 +88,14 @@ public class BloodPressureStrategy implements AlertStrategy {
               lastRecordSys.getTimestamp());
         }
       }
+      ArrayList<PatientRecord> lastRecordsDia = patient.getRecordsLast(1, "DiastolicPressure");
+      if (lastRecordsDia.size() == 0) {
+        return null;
+        
+      } else {
+        lastRecordDia = lastRecordsDia.get(0);
+      }
+      
       if (lastRecordDia != null) {
         if (lastRecordDia.getMeasurementValue() > DIASTOLIC_THRESHOLD_TOP) {
           return factory.createAlert(patient.getPatientId(), "High Diastolic Blood Pressure Alert",

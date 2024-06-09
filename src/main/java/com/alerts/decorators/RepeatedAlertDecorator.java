@@ -18,8 +18,17 @@ public class RepeatedAlertDecorator extends AlertDecorator {
     }
 
     public void checkRepeat() {
+         
         System.out.println("Checking for repeated alerts");
-        // AlertGenerator.evaluateData(DataStorage.getPatient(alert.getPatientId()));
+        try {  Thread.sleep(500); 
+        } catch (InterruptedException exc) {
+            Thread.currentThread().interrupt();
+        }
+        AlertGenerator generator = new AlertGenerator(DataStorage.getInstance());
+        try {generator.evaluateData(DataStorage.getInstance().getPatient(alert.getPatientId()));} 
+        catch (Exception e) {
+            e.printStackTrace();
     }
 
+}
 }

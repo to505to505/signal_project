@@ -17,12 +17,20 @@ public class BloodSaturationStrategy implements AlertStrategy {
     
     @Override
     public Alert checkAlert(Patient patient) {
+      PatientRecord lastRecord = null;
       BloodOxygenAlertFactory factory = new BloodOxygenAlertFactory();
-      PatientRecord lastSaturationRecord = patient.getRecordsLast(1, "Saturation").get(0);
-      if (lastSaturationRecord != null) 
-        if(lastSaturationRecord.getMeasurementValue() < SATURATION_THRESHOLD) {
+      ArrayList<PatientRecord> lastSaturationRecordLists = patient.getRecordsLast(1, "Saturation");
+      if (lastSaturationRecordLists.size() == 0) {
+        return null;
+        
+      } else {
+        lastRecord= lastSaturationRecordLists.get(0);
+      }
+      if (lastRecord != null) {
+        if(lastRecord.getMeasurementValue() < SATURATION_THRESHOLD) {
         return factory.createAlert(patient.getPatientId(), "Low Saturation Alert", System.currentTimeMillis());
       }
+    }
 
       
       ArrayList<PatientRecord> lastTen = patient.getRecordsLastTenMinue( "Saturation");

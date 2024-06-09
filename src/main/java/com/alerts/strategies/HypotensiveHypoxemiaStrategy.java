@@ -1,9 +1,13 @@
 package com.alerts.strategies;
 
+import java.lang.reflect.Array;
+
 import com.alerts.Alert;
 import com.alerts.factories.HypotensiveHypoxemiaAlertFactory;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
+
+import java.util.ArrayList;
 
 
 public class HypotensiveHypoxemiaStrategy implements AlertStrategy {
@@ -17,16 +21,31 @@ public class HypotensiveHypoxemiaStrategy implements AlertStrategy {
       boolean lowSystolic = false;
       boolean lowSaturation = false;
 
-      PatientRecord lastRecord = patient.getRecordsLast(1, "SystolicPressure").get(0);
+      PatientRecord lastRecord = null;
+
+      ArrayList<PatientRecord> lastSystolicRecords = patient.getRecordsLast(1, "SystolicPressure");
+        if(lastSystolicRecords.size() == 0) {
+            return null;
+        }
+        else {
+            lastRecord = lastSystolicRecords.get(0);
+        }
+
+        
       if (lastRecord != null) {
         if ( lastRecord.getMeasurementValue() <  SYSTOLICT_TRESHOLD) {
         lowSystolic = true;
         }
       }
 
-      PatientRecord lastSaturationRecord = patient.getRecordsLast(1, "Saturation").get(0);
-      if (lastSaturationRecord != null) {
-        if( lastSaturationRecord.getMeasurementValue() < SATURATION_THRESHOLD)  
+      ArrayList<PatientRecord>  lastSaturationRecords = patient.getRecordsLast(1, "Saturation");
+      if(lastSaturationRecords.size() == 0) {
+        return null;
+      } else {
+        lastRecord = lastSaturationRecords.get(0);
+      }
+      if (lastRecord != null) {
+        if( lastRecord.getMeasurementValue() < SATURATION_THRESHOLD)  
                 lowSaturation = true;
       }
             

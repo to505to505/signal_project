@@ -85,12 +85,13 @@ public class Patient {
     }
 
     public ArrayList<PatientRecord> getRecordsLast(int NumRecords, String recordType) {
-        int u = 0;
+        
         ArrayList<PatientRecord> lastRecords = new ArrayList<>();
         if (patientRecords.size() == 0) {
-            return null;
-            
+            return lastRecords;
         }
+        int u = 0;
+
         for (int i = patientRecords.size() - 1; i >= 0; i--) {
 
             if(u == NumRecords)
@@ -101,6 +102,7 @@ public class Patient {
                 u++;
                 lastRecords.add(record);
             }
+            
             
         }
         return lastRecords;

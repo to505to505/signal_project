@@ -4,10 +4,10 @@ import com.alerts.strategies.BloodPressureStrategy;
 import com.alerts.strategies.BloodSaturationStrategy;
 import com.alerts.strategies.ECGStrategy;
 import com.alerts.strategies.HypotensiveHypoxemiaStrategy;
-
-
+import com.beust.ah.A;
 import com.data_management.DataStorage;
 import com.data_management.Patient;
+
 
 
 import java.io.IOException;
@@ -22,6 +22,7 @@ import com.alerts.strategies.AlertStrategy;
  */
 public class AlertGenerator {
     private DataStorage dataStorage;
+    public ArrayList<Alert> triggeredAlerts;
     
     private final ArrayList<AlertStrategy> alertStrategies;
 
@@ -34,6 +35,7 @@ public class AlertGenerator {
      *                    data
      */
     public AlertGenerator(DataStorage dataStorage) {
+        this.triggeredAlerts = new ArrayList<>();
         this.dataStorage = dataStorage;
         this.alertStrategies = new ArrayList<>();
     }
@@ -51,10 +53,14 @@ public class AlertGenerator {
      */
     public void evaluateData(Patient patient) throws IOException {
         initializeAlertStrategies();
+        for(AlertStrategy strategy : alertStrategies){
+            Alert alert = strategy.checkAlert(patient);
+            if(alert != null){
+                triggerAlert(alert);
+            }
 
-        alertStrategies.stream().map(strategy -> strategy.checkAlert(patient))
-        .filter(alert -> alert != null)
-        .forEach(this::triggerAlert);
+        }
+       
     
     }
         
@@ -69,14 +75,30 @@ public class AlertGenerator {
      */
     public void triggerAlert(Alert alert) {
         System.out.println("Patient  " + alert.getPatientId() +" has the following alrt:  " +alert.getCondition() + ". Time:  " + alert.getTimestamp());
+        triggeredAlerts.add(alert);
+        
+        
         // Implementation might involve logging the alert or notifying staff
     }
 
     private void initializeAlertStrategies() {
-    
+        this.alertStrategies.add(new HypotensiveHypoxemiaStrategy());
         this.alertStrategies.add(new BloodPressureStrategy());
         this.alertStrategies.add(new BloodSaturationStrategy());
-        this.alertStrategies.add(new HypotensiveHypoxemiaStrategy());
+        
         this.alertStrategies.add(new ECGStrategy());
+    }
+    public static void main(String[] args) {
+        Patient patient = new Patient(1);
+        patient.addRecord(70, "Saturation", System.currentTimeMillis());
+        AlertGenerator alertGenerator = new AlertGenerator(new DataStorage());
+
+        try {
+            alertGenerator.evaluateData(patient);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(alertGenerator.triggeredAlerts.get(0).getCondition());
+        System.out.println(patient.getRecordsLast(1, "Saturation"));
     }
 }
