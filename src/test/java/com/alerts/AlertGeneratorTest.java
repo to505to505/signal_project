@@ -4,15 +4,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.alerts.strategies.AlertStrategy;
-import com.alerts.strategies.BloodPressureStrategy;
-import com.alerts.strategies.BloodSaturationStrategy;
-import com.alerts.strategies.ECGStrategy;
-import com.alerts.strategies.HypotensiveHypoxemiaStrategy;
+
 import com.data_management.DataStorage;
 import com.data_management.Patient;
-import com.alerts.Alert;
-import com.alerts.AlertGenerator;
+
 
 
 
@@ -128,14 +123,6 @@ public class AlertGeneratorTest {
         // Verify that an alert was triggered
         assertTrue(alertGenerator.triggeredAlerts.get(0).getCondition().equals("HypotensiveHypoxemia Alert"));
     }
-
-
-
-
-
-
-
-
 
     @Test
     public void testEvaluateDataPressureNoAlert() throws IOException {
