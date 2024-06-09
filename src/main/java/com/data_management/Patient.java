@@ -61,7 +61,7 @@ public class Patient {
     }
 
 
-    public ArrayList<PatientRecord> getRecordsLastMinute(int NumRecords, String recordType) {
+    public ArrayList<PatientRecord> getRecordsLastMinute( String recordType) {
         
         ArrayList<PatientRecord> lastRecords = new ArrayList<>();
         if (patientRecords.size() == 0) {
@@ -72,8 +72,16 @@ public class Patient {
             return getRecords(timeNow-10000*60, timeNow);
         }
        
-        
-        
+    }
+    public ArrayList<PatientRecord> getRecordsLastTenMinue(String recordType) {
+        ArrayList<PatientRecord> lastRecords = new ArrayList<>();
+        if (patientRecords.size() == 0) {
+            return null;
+            
+        } else {
+            long timeNow = patientRecords.getLast().getTimestamp();
+            return getRecords(timeNow-10*60*1000, timeNow);
+        }
     }
 
     public ArrayList<PatientRecord> getRecordsLast(int NumRecords, String recordType) {
