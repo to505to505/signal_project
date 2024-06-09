@@ -17,11 +17,24 @@ public class WebSocketOutputStrategy implements OutputStrategy {
 
     @Override
     public void output(int patientId, long timestamp, String label, String data) {
-        String message = String.format("%d,%d,%s,%s", patientId, timestamp, label, data);
-        // Broadcast the message to all connected clients
-        for (WebSocket conn : server.getConnections()) {
-            conn.send(message);
+        String message = formatMessage(patientId, timestamp, label, data);
+        if (message != null) {
+            // Broadcast the message to all connected clients
+            for (WebSocket conn : server.getConnections()) {
+                conn.send(message);
+            }
         }
+    }
+
+    public static String formatMessage(int patientId, long timestamp, String label, String data) {
+        // Validate the message fields
+        if (patientId <= 0 || label == null || label.isEmpty() || timestamp <= 0 || data == null || data.isEmpty()) {
+            System.err.println("Invalid message fields: patientId=" + patientId + ", timestamp=" + timestamp + ", label=" + label + ", data=" + data);
+            return null;
+        }
+
+        // Return formatted message
+        return String.format("%d,%d,%s,%s", patientId, timestamp, label, data);
     }
 
     private static class SimpleWebSocketServer extends WebSocketServer {
