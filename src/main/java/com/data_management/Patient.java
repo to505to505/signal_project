@@ -50,14 +50,30 @@ public class Patient {
      * @return a list of PatientRecord objects that fall within the specified time
      *         range
      */
-    public List<PatientRecord> getRecords(long startTime, long endTime) {
-        List<PatientRecord> filteredRecords = new ArrayList<>();
+    public ArrayList<PatientRecord> getRecords(long startTime, long endTime) {
+        ArrayList<PatientRecord> filteredRecords = new ArrayList<>();
         for (PatientRecord record : patientRecords) {
             if (record.getTimestamp() >= startTime && record.getTimestamp() <= endTime) {
                 filteredRecords.add(record);
             }
         }
         return filteredRecords;
+    }
+
+
+    public ArrayList<PatientRecord> getRecordsLastMinute(int NumRecords, String recordType) {
+        
+        ArrayList<PatientRecord> lastRecords = new ArrayList<>();
+        if (patientRecords.size() == 0) {
+            return null;
+            
+        } else {
+            long timeNow = patientRecords.getLast().getTimestamp();
+            return getRecords(timeNow-10000*60, timeNow);
+        }
+       
+        
+        
     }
 
     public ArrayList<PatientRecord> getRecordsLast(int NumRecords, String recordType) {

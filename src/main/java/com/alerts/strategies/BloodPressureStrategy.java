@@ -14,6 +14,10 @@ import org.testng.annotations.Factory;
 
 public class BloodPressureStrategy implements AlertStrategy {
     public static final int TREND_TRESHOLD = 10;
+    public static final int DIASTOLIC_THRESHOLD_TOP = 180;
+    public static final int DIASTOLIC_THRESHOLD_BOTTOM = 90;
+    public static final int SYSTOLIC_THRESHOLD_TOP = 120;
+    public static final int SYSTOLIC_THRESHOLD_BOTTOM = 60;
 
 
     public Alert checkTrend( String type, Patient patient, BloodPressureAlertFactory factory) {
@@ -45,32 +49,46 @@ public class BloodPressureStrategy implements AlertStrategy {
       BloodPressureAlertFactory factory = new BloodPressureAlertFactory();
       Alert alert = checkTrend("SystolicPressure", patient, factory);
       Alert alert2 = checkTrend("DiastolicPressure", patient, factory);
-      if(alert == null) {
-        return alert2;
-      } else if(alert2 != null) {
+      if(alert == null && alert2 == null) {
+        
+      } else if(alert == null) {
+          return alert2;
+      } else if(alert2 == null) {
+        return alert;
+      }  else {
+    
         String message1 = alert.getCondition();
         String message2 = alert2.getCondition();
 
-        return factory.createAlert(patient.getPatientId(), "Systolic: " + message1 + " Diastolic: " + message2, TREND_TRESHOLD)
-      }
-      
-
-      
+        return factory.createAlert(patient.getPatientId(), "Systolic: " + message1 + " Diastolic: " + message2, TREND_TRESHOLD);
+      } 
       
 
 
-      lastRecord = patient.getLastRecord("DiastolicPressure");
-      if (lastRecord != null) {
-        if (lastRecord.getMeasurementValue() > HIGH_DIASTOLIC_THRESHOLD) {
-          return alertFactory.createAlert(patient.getPatientId(), "BloodPressureOverDiastolicThresholdAlert",
-              lastRecord.getTimestamp());
+      PatientRecord lastRecordSys = patient.getRecordsLast(1, "SystolicPressure").get(0);
+      PatientRecord lastRecordDia = patient.getRecordsLast(1, "DiastolicPressure").get(0);
+      if (lastRecordSys != null) {
+        if (lastRecordSys.getMeasurementValue() > SYSTOLIC_THRESHOLD_TOP) {
+          return factory.createAlert(patient.getPatientId(), "High Systolic Blood Pressure Alert",
+              lastRecordSys.getTimestamp());
         }
-        if (lastRecord.getMeasurementValue() < LOW_DIASTOLIC_THRESHOLD) {
-          return alertFactory.createAlert(patient.getPatientId(),
-              "BloodPressureUnderDiastolicThresholdAlert", lastRecord.getTimestamp());
+        if (lastRecordSys.getMeasurementValue() < SYSTOLIC_THRESHOLD_BOTTOM) {
+          return factory.createAlert(patient.getPatientId(), "Low Systolic Blood Pressure Alert",
+              lastRecordSys.getTimestamp());
         }
       }
-
+      if (lastRecordDia != null) {
+        if (lastRecordDia.getMeasurementValue() > DIASTOLIC_THRESHOLD_TOP) {
+          return factory.createAlert(patient.getPatientId(), "High Diastolic Blood Pressure Alert",
+              lastRecordDia.getTimestamp());
+        }
+        if (lastRecordDia.getMeasurementValue() < DIASTOLIC_THRESHOLD_BOTTOM) {
+          return factory.createAlert(patient.getPatientId(), "Low Diastolic Blood Pressure Alert",
+              lastRecordDia.getTimestamp());
+        }
+      }
+      
       return null;
     }
+    
 }
