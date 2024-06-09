@@ -77,8 +77,7 @@ public class Patient {
                 u++;
                 lastRecords.add(record);
             }
-            if(u == NumRecords)
-                break;
+            
         }
         return lastRecords;
         
