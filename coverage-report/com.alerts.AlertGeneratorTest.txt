@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.alerts.AlertGeneratorTest
+-------------------------------------------------------------------------------
+Tests run: 7, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 7.249 s <<< FAILURE! - in com.alerts.AlertGeneratorTest
+com.alerts.AlertGeneratorTest.testEvaluateDataPressureNoAlert  Time elapsed: 1.027 s  <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "java.util.List.isEmpty()" because "this.triggeredAlerts" is null
+	at com.alerts.AlertGeneratorTest.testEvaluateDataPressureNoAlert(AlertGeneratorTest.java:142)
+

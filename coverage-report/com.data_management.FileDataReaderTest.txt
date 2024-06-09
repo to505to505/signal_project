@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: com.data_management.FileDataReaderTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.109 s <<< FAILURE! - in com.data_management.FileDataReaderTest
+com.data_management.FileDataReaderTest.testReadData  Time elapsed: 0.107 s  <<< ERROR!
+java.lang.NullPointerException: Cannot invoke "com.data_management.Patient.getRecordsLast(int, String)" because "patient" is null
+	at com.data_management.FileDataReaderTest.testReadData(FileDataReaderTest.java:35)
+

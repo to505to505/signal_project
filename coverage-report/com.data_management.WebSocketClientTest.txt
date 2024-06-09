@@ -1,0 +1,9 @@
+-------------------------------------------------------------------------------
+Test set: com.data_management.WebSocketClientTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.489 s <<< FAILURE! - in com.data_management.WebSocketClientTest
+com.data_management.WebSocketClientTest.testReadData  Time elapsed: 0.487 s  <<< ERROR!
+java.util.concurrent.CompletionException: java.net.ConnectException
+Caused by: java.net.ConnectException
+Caused by: java.nio.channels.ClosedChannelException
+
