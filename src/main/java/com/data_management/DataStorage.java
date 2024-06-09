@@ -15,6 +15,7 @@ import com.alerts.AlertGenerator;
  */
 public class DataStorage {
     private ConcurrentMap<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
+    public static DataStorage instance;
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
@@ -24,6 +25,18 @@ public class DataStorage {
         this.patientMap = new ConcurrentHashMap<>();
     }
 
+
+    public static DataStorage getInstance() {
+        if (instance == null) {
+            synchronized (DataStorage.class) {
+                if (instance == null) {
+                    instance = new DataStorage();
+                }
+            }
+        }
+        return instance;
+    }
+    
     /**
      * Adds or updates patient data in the storage.
      * If the patient does not exist, a new Patient object is created and added to
@@ -47,6 +60,7 @@ public class DataStorage {
         });
     }
 
+    
     /**
      * Retrieves a list of PatientRecord objects for a specific patient, filtered by
      * a time range.
